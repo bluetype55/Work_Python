@@ -90,3 +90,5 @@ def get_matches_timelines(match_id):
     url2 = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={riot_api_key}'
     res2 = requests.get(url2).json()
     return res1,res2
+
+print('c')
