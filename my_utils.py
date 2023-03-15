@@ -5,7 +5,7 @@ import requests
 
 dsn = cx_Oracle.makedsn('localhost',1521,'xe')
 seoul_api_key = '4378747841626c753937786d7a7a4e'
-riot_api_key = 'RGAPI-969af934-9bfa-4424-984f-1445fa48bdd8'
+riot_api_key = 'RGAPI-6a3eb65d-7755-4872-9c1c-a84f9cda8599'
 
 def db_open():
     global db
@@ -90,5 +90,3 @@ def get_matches_timelines(match_id):
     url2 = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={riot_api_key}'
     res2 = requests.get(url2).json()
     return res1,res2
-
-print('c')
