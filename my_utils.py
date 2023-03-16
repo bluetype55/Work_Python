@@ -2,10 +2,11 @@ import pymysql
 import pandas as pd
 import cx_Oracle
 import requests
+import random
 
 dsn = cx_Oracle.makedsn('localhost',1521,'xe')
 seoul_api_key = '4378747841626c753937786d7a7a4e'
-riot_api_key = 'RGAPI-bc8fd376-1487-4743-984c-11b70c8bac6d'
+riot_api_key = 'RGAPI-b6a91920-eb00-4efa-aca3-a2e321ee51a3'
 
 def db_open():
     global db
@@ -79,8 +80,9 @@ def get_puuid(user):
 
 
 def get_match_id(puuid, num):
-    url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?type=ranked&start=0&count={num}&api_key={riot_api_key}'
-    res = requests.get(url).json()
+    url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?type=ranked&start=0&count=100&api_key={riot_api_key}'
+    id_list = requests.get(url).json()
+    res = random.sample(id_list, num)
     return res
 
 
