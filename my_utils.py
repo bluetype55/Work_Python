@@ -9,7 +9,7 @@ import random
 
 dsn = cx_Oracle.makedsn('localhost',1521,'xe')
 seoul_api_key = '4378747841626c753937786d7a7a4e'
-riot_api_key = 'RGAPI-c060f5ac-e649-4d77-8044-3f1653236155'
+riot_api_key = 'RGAPI-06efd354-cc80-4693-a75b-98f1d9158215'
 
 def db_open():
     global db
@@ -355,3 +355,38 @@ def insert_matches_timeline_oracle(row):
             )
     oracle_execute(query)
     return query
+
+
+def assi_calc(x):
+    try:
+        return ','.join(list(map(lambda y : str(y),x['assistingParticipantIds'])))
+    except:
+        return ''
+
+
+def get_kill_log_df(raw_data):
+    all_lst = []
+    for i, game in enumerate(raw_data['matches']):
+        game_id = raw_data.iloc[i]['match_id']
+        game_duration = game['info']['gameDuration']
+        game_version = game['info']['gameVersion']
+
+        bans = '|'.join(str(ban['championId']) for team in game['info']['teams'] for ban in team['bans'])
+
+        k_log, v_log, a_log = [], [], []
+        for frame in raw_data.iloc[i]['timeline']['info']['frames']:
+            for event in frame['events']:
+                try:
+                    event_type = event['type']
+                    if event_type == 'CHAMPION_KILL':
+                        k_log.append(str(event['killerId']))
+                        v_log.append(str(event['victimId']))
+                        a_log.append(assi_calc(event))
+                except KeyError:
+                    continue
+
+        k_log, v_log, a_log = '|'.join(k_log), '|'.join(v_log), '|'.join(a_log)
+        all_lst.append([game_id, game_duration, game_version, bans, k_log, v_log, a_log])
+
+    df = pd.DataFrame(all_lst,columns=['gameId','gameDuration','gameVersion','ban','killerId','victimId','assistId'])
+    return df
