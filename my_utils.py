@@ -9,7 +9,7 @@ import random
 
 dsn = cx_Oracle.makedsn('localhost',1521,'xe')
 seoul_api_key = '4378747841626c753937786d7a7a4e'
-riot_api_key = ''
+riot_api_key = 'RGAPI-3c09d778-af7b-4f6b-94b4-e7784679bc11'
 
 def db_open():
     global db
